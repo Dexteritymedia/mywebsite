@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% load wagtailimages_tags wagtailcore_tags %}
+
+{% block body_class %}template-blogindexpage{% endblock %}
+
+{% block content %}
+<br>
+	<div class="container">
+	<div id="carouselExampleFade" class="carousel slide carousel-fade mt-4" data-bs-ride="carousel">
+		<div class="carousel-inner">
+		{% for loop_cycle in self.carousel_images.all %}
+		{% image loop_cycle.image original as img %}
+		<div class="carousel-item{% if forloop.counter == 1 %} active{% endif %}" data-bs-interval="20000">
+			<img src="{{ img.url }}" class="d-block w-100" alt="{{ img.alt }}">
+			<div class="carousel-caption">
+			{% if loop_cycle.color == 'W' %}
+			<h4 class="display-4 text-white">{{ loop_cycle.title|title }}</h4>
+			{% elif loop_cycle.color == 'B' %}
+			<h4 class="display-4" style="color:black;">{{ loop_cycle.title|title }}</h4>
+			{% elif loop_cycle.color == 'R' %}
+			<h4 class="display-4" style="color:red;">{{ loop_cycle.title|title }}</h4>
+			{% endif %}
+			<a class="btn btn-primary btn-lg" href="{{ loop_cycle.link }}" role="button">Read More</a>
+			</div>
+			</div>
+		{% endfor %}
+		</div>
+	
+	
+		<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Previous</span>
+		</button>
+	
+		<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+		</button>
+	
+	</div>
+	</div>
+	
+	<div class="container">
+		<div class="row row-cols-1 row-cols-md-3 g-4 mt-3 mb-3">
+		
+		{% for post in posts %}
+				<div class="col">
+					<div class="card box-shadow-hover pointer">
+					<a href="{{ post.url }}">
+					{% image post.image original as blog_img %}
+						<img src="{{ blog_img.url }}" class="card-img-top" alt="{{ blog_img.alt }}">
+							<div class="card-body">
+								<h2 class="card-title">{{ post.title|title }}</h2>
+								</a>
+								{% with categories=self.categories.all %}
+								{% if categories %}
+								{% for cat in categories %}
+								<h5 class="card-title">{{ cat.name|title }}</h5>
+								{% endfor %}
+								{% endif %}
+								{% endwith %}
+								<p class="card-text">
+								<small class="text-muted">{{ post.date }}</small>
+								</p>
+								<a href="{{ post.url }}">
+								<p class="card-text">
+								{{ post.body|richtext|safe|truncatewords:50 }}
+								</p>
+							</div>
+							</a>
+					</div>
+				</div>
+				
+		{% endfor %}
+		
+		</div>
+		
+		{% if posts.paginator.num_pages > 1 %}
+		<div class="container">
+		<div class="row">
+		<div class="col-lg-12">
+		<div class="pagination justify-content-center mt-3">
+		{% if posts.has_previous %}
+		<li class="page-item">
+		<a href="?page={{ posts.previous_page_number }}" class="page-link">
+		<span>&laquo;</span>
+		</a>
+		</li>
+		{% endif %}
+		
+		{% for page_num in posts.paginator.page_range %}
+		<li class="page-item {% if page_num == posts.number %} active{% endif %}">
+		<a href="?page={{ page_num }}" class="page-link">
+		{{ page_num }}
+		</a>
+		</li>
+		{% endfor %}
+		
+		{% if posts.has_next %}
+		<li class="page-item">
+		<a href="?page={{ posts.next_page_number }}" class="page-link">
+		<span>&raquo;</span>
+		</a>
+		</li>
+		{% endif %}
+		</div>
+		</div>
+		</div>
+		</div>
+		{% endif %}
+		
+	
+		
+	</div>
+
+{% endblock %}

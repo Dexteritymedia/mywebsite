@@ -1,0 +1,265 @@
+{% load static wagtailimages_tags wagtailcore_tags wagtailuserbar menus_tags %}
+
+{% get_menu 'menu' as navigation %}
+{% get_menu 'footer' as footer %}
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {% block title %}
+                {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+            {% endblock %}
+            {% block title_suffix %}
+                {% wagtail_site as current_site %}
+                {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
+            {% endblock %}
+        </title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+        {# Global stylesheets #}
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/mywebsite.css' %}">
+		<link rel="shortcut icon" href="{% static 'images/bootstrap-icon' %}" />
+
+        {% block extra_css %}
+            {# Override this in templates to add extra stylesheets #}
+        {% endblock %}
+		
+		<style>
+		.box-shadow-hover:hover {
+		box-shadow: 0 2px 5px 0 
+		rgba(0, 0, 0, 0.5), 0
+		1px 10px 0 rgba(0, 0, 0, 0.5);
+	}
+	.pointer {
+		cursor: pointer;
+	}
+	a{
+		color: #000000;
+		text-decoration: none;
+	}
+	a:hover{
+		color: blue;
+		text-decoration: underline;
+	}
+		</style>
+		{% if settings.social_media.SiteSettings.site_logo %}
+{% image settings.social_media.SiteSettings.site_logo max-30x30 as icon_image %}
+<link rel="shortcut icon" href="{{ icon_image.url }}" />
+{% endif %}
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}">
+        {% wagtailuserbar %}
+
+	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+	<!--<nav class="navbar navbar-light" style="background-color: #e3f2fd;"> to change the color
+	<div class="container">
+    <a class="navbar-brand" href="#"> to add image
+      <img src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24">Title
+    </a>
+  </div>-->
+	
+  <div class="container-fluid">
+  {% if settings.social_media.SiteSettings.site_name %}
+    <a class="navbar-brand" href="/">{{ settings.social_media.SiteSettings.site_name }}</a>
+	{% endif %}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+		{% for item in navigation.menu_items.all %}
+		<li class="nav-item">
+          <a class="nav-link active"{% if item.open_in_new_tab %} target="_blank"{% endif %} href="{{ item.link }}">{{ item.title|title }}</a>
+        </li>
+		{% endfor %}
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<p></p>
+
+
+<!--
+	<header id="header" class="fixed-top ">
+    <div class="container d-flex align-items-center justify-content-between">
+      <h1 class="logo"><a href="index.html">Techie</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#about">About</a></li>
+          <li><a class="nav-link scrollto" href="#services">Services</a></li>
+          <li><a class="nav-link scrollto " href="#portfolio">Portfolio</a></li>
+          <li><a class="nav-link scrollto" href="#team">Team</a></li>
+          <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="#">Drop Down 1</a></li>
+              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  <li><a href="#">Deep Drop Down 1</a></li>
+                  <li><a href="#">Deep Drop Down 2</a></li>
+                  <li><a href="#">Deep Drop Down 3</a></li>
+                  <li><a href="#">Deep Drop Down 4</a></li>
+                  <li><a href="#">Deep Drop Down 5</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Drop Down 2</a></li>
+              <li><a href="#">Drop Down 3</a></li>
+              <li><a href="#">Drop Down 4</a></li>
+            </ul>
+          </li>
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          <li><a class="getstarted scrollto" href="#about">Get Started</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+<!--
+    </div>
+  </header><!-- End Header -->
+  
+
+  
+  <div class="text-center text-md-right pt-3 pt-md-0">
+			{% if settings.social_media.SocialMediaSettings.twitter %}
+          <a href="{{ settings.social_media.SocialMediaSettings.twitter }}" class="twitter"><i class="bx bxl-twitter"></i></a>
+		  {% endif %}
+		  
+		  {% if settings.social_media.SocialMediaSettings.facebook %}
+          <a href="{{ settings.social_media.SocialMediaSettings.facebook }}" class="facebook"><i class="bx bxl-facebook"></i></a>
+		  {% endif %}
+		  
+		  {% if settings.social_media.SocialMediaSettings.instagram %}
+          <a href="{{ settings.social_media.SocialMediaSettings.instagram }}" class="instagram"><i class="bx bxl-instagram"></i></a>
+		  {% endif %}
+		  
+          <!--<a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>-->
+		  
+		  {% if settings.social_media.SocialMediaSettings.linkedin %}
+          <a href="{{ settings.social_media.SocialMediaSettings.linkedin }}" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+		  {% endif %}
+		  
+		  {% if settings.social_media.SocialMediaSettings.pinterest %}
+          <a href="{{ settings.social_media.SocialMediaSettings.pinterest }}" class="google-plus"><i class="bx bxl-skype"></i></a>
+		  {% endif %}
+		  <!--Pinterest won't show because it is left blank in SocialMediaSettings-->
+  </div>
+  
+        {% block content %}{% endblock %}
+		
+<footer class="bg-dark text-center text-white">
+  <div class="container p-4">
+  
+  <section class="mb-4 mt-3">
+  {% if settings.social_media.SocialMediaSettings.facebook %}
+  <a class="btn btn-outline-light btn-floating m-1" href="{{ settings.social_media.SocialMediaSettings.facebook }}" role="button">
+  <i class="fab fa-facebook-f"></i>
+  </a>
+   {% endif %}
+   
+   {% if settings.social_media.SocialMediaSettings.instagram %}
+  <a class="btn btn-outline-light btn-floating m-1" href="{{ settings.social_media.SocialMediaSettings.instagram }}" role="button">
+  <i class="fab fa-facebook-f"></i>
+  </a>
+  {% endif %}
+  
+  {% if settings.social_media.SocialMediaSettings.twitter %}
+  <a class="btn btn-outline-light btn-floating m-1" href="{{ settings.social_media.SocialMediaSettings.twitter }}" role="button">
+  <i class="fab fa-facebook-f"></i>
+  </a>
+  {% endif %}
+  
+  {% if settings.social_media.SocialMediaSettings.linkedin %}
+  <a class="btn btn-outline-light btn-floating m-1" href="{{ settings.social_media.SocialMediaSettings.linkedin }}" role="button">
+  <i class="fab fa-facebook-f"></i>
+  </a>
+  {% endif %}
+  </section>
+  
+  <section class="">
+  <form action="">
+  <div class="row d-flex justify-content-center">
+  
+  <div class="col-auto">
+  <p class="pt-2">
+  <strong>Sign up for our newsletter</strong>
+  </p>
+  </div>
+  
+  <div class="col-md-5 col-12">
+  <div class="form-outline form-white mb-4">
+  <input type="email" id="form5Example21" class="form-control"/>
+  <label class="form-label" for="form5Example21">Email address</label>
+  </div>
+  </div>
+  
+  <div class="col-auto">
+  <button type="submit" class="btn btn-outline-light mb-4">
+  Subscribe
+  </button>
+  </div>
+  
+  </div>
+  </form>
+  </section>
+  
+  <section class="mb-4">
+  <p>About</p>
+  <p></p>
+  </section>
+  
+ {% if footer.menu_items.all %}
+  <section class="">
+  <div class="row">
+  <div class="mb-4 mb-md-0 text-center">
+  
+  <h5 class="text-uppercase">Links</h5>
+  
+  <ul class="list-unstyled mb-0">
+  {% for item in footer.menu_items.all %}
+  
+  <strong>
+  <li>
+          <a class="text-white"{% if item.open_in_new_tab %} target="_blank"{% endif %} href="{{ item.link }}">{{ item.title }}</a>
+        </li>
+		{% endfor %}
+		</strong>
+  
+  </ul>
+  
+  
+  </div>
+  </div>
+  </section>
+  {% endif %}
+  
+  </div>
+  
+  <div class="text-center p-3" style="background-color: rgb(0,0,0,0.2);">
+  2020 Copyright
+  <a class="text-white" href="">Website</a>
+  </div>
+  
+  </footer>
+
+        {# Global javascript #}
+		<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/mywebsite.js' %}"></script>
+        {% block extra_js %}
+            {# Override this in templates to add extra javascript #}
+        {% endblock %}
+    </body>
+</html>

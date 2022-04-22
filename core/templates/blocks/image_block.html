@@ -1,0 +1,32 @@
+{% load wagtailimages_tags %}
+
+<div class="container mb-sm-5 mt-sm-5">
+	<div class="row">
+	
+{% if self.shadow == 'S' %}
+<div class="shadow-sm p-3 bg-body rounded">
+<figure class="figure">
+{% image self.image original as banner %}
+<img src="{{ banner.url }}" class="figure-img img-fluid rounded" alt="{{ banner.alt }}">
+<figcaption class="figure-caption text-center">{{ self.caption }} - {{ self.attribution }}</figcaption>
+</figure>
+</div>
+{% elif self.shadow == 'R' %}
+<div class="shadow p-3 bg-body rounded">
+<figure class="figure">
+{% image self.image original as banner %}
+<img src="{{ banner.url }}" class="figure-img img-fluid rounded" alt="{{ banner.alt }}">
+<figcaption class="figure-caption text-center">{{ self.caption }} - {{ self.attribution }}</figcaption>
+</figure>
+</div>
+{% elif self.shadow == 'L' %}
+<div class="shadow-lg p-3 rounded">
+<figure class="figure">
+{% image self.image original as banner %}
+<img src="{{ banner.url }}" class="figure-img img-fluid rounded" alt="{{ banner.alt }}">
+<figcaption class="figure-caption text-center">{{ self.caption }} - {{ self.attribution }}</figcaption>
+</figure>
+</div>
+{% endif %}
+</div>
+</div>

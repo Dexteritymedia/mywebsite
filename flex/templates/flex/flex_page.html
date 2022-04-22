@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8 mt-5">
+			
+				<h1 class="display-4">{{ self.title|title }}</h1>
+				<div class="lead">{{ self.subtitle }}</div>
+			</div>
+
+{% for block in page.content %}
+	{% include_block block %}
+{% endfor %}
+
+
+<div class="col-sm-4 mt-5 mb-3">
+<h2 class="text-center"><div class="btn btn-primary btn-lg" role="button" disabled>Latest Posts</div></h2>
+
+<div class="list-group list-group-flush">
+
+{% for post in latest %}
+
+<a href="{{ post.url }}" class="list-group-item list-group-item-action" aria-current="true">
+<div class="justify-content-between">
+<div class="row">
+<div class="col-4">
+{% image post.image fill-250x250 as blog_img %}
+<img src="{{ blog_img.url }}" class="img-thumbnail" alt="{{ blog_img.alt }}">
+</div>
+<div class="col-8">
+<h3 class="mb-1">{{ post.title|title }}</h3>
+<small>{{ post.date }}</small>
+</div>
+</div>
+</div>
+</a>
+
+{% endfor %}
+</div>
+
+</div>
+
+</div>
+	</div>
+{% endblock %}

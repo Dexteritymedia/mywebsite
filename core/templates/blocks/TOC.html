@@ -1,0 +1,21 @@
+{% comment %}
+	Content is coming from the StandardBlock StreamField
+	class within 'blocks.py'
+{% endcomment %}
+
+<div class="container">
+	<div class="row">
+		<div class="col">
+<ul>
+{% for block in page.content %}
+<li><a href="#{{ block.id }}">{{ block.value.header }}</a></li>
+{% endfor %}
+</ul>
+
+{% for block in page.content %}
+<h2><a id="{{ block.id }}">{{ block.value.header }}</a></h2>
+{{ block.value.content }}
+{% endfor %}
+</div>
+</div>
+</div>
