@@ -1,0 +1,42 @@
+
+
+{% load static wagtailimages_tags wagtailcore_tags crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+<div class="row">
+<div class="col mb-5">
+<br/>
+
+  <div class="row d-flex justify-content-center">
+<h1 class="text-center">{{ page.title|title }}</h1>
+{% if page.intro %}
+<div class="col-auto">
+  <p class="pt-2">
+<strong>{{ page.intro|richtext }}</strong>
+</p>
+</div>
+{% endif %}
+
+<div class="col-md-5 col-12">
+<div class="form-outline form-white">
+<form action="{% pageurl page %}" method="POST">
+{% csrf_token %}
+{{ form|crispy }}
+</div>
+</div>
+
+<div class="col-auto">
+<p class="pt-4">
+<button type="submit" class="btn btn-outline-primary">Subscribe</button>
+</div>
+</form>
+
+</div>
+
+</div>
+</div>
+</div>
+
+{% endblock %}

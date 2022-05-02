@@ -1,7 +1,7 @@
 from django.db import models
 from django import forms
 from django.utils import timezone
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -27,7 +27,7 @@ color = (
 
 class BlogPageCarousel(Orderable):
 
-    page = ParentalKey('blog.BlogIndexPage', related_name='carousel_images',)
+    page = ParentalKey('blog.BlogIndexPage', related_name='carousel_images', blank=True)
     carousel_image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -38,7 +38,7 @@ class BlogPageCarousel(Orderable):
     carousel_page = models.ForeignKey(
         'wagtailcore.Page',
         null=True,
-        blank=False,
+        blank=True,
         related_name='+',
         on_delete=models.CASCADE,
         )
@@ -80,7 +80,7 @@ class BlogPageCarousel(Orderable):
 
 class BlogIndexPage(RoutablePageMixin, Page):
     template = "blog/blog_index.html"
-    max_count = 0 #this shows how many pages can be created in this model which is 1
+    max_count = 1 #this shows how many pages can be created in this model which is 1
     
     intro = RichTextField(blank=True)
 
@@ -120,6 +120,14 @@ class BlogIndexPage(RoutablePageMixin, Page):
         context['categories'] = BlogCategory.objects.all()
         return context
 
+
+    @route(r'^(\d{4})/(\d{2})/(\d{2})/(.+)/$', name='post_view')
+    def post_by_date_slug(self, request, year, month, day, slug, *args, **kwargs):
+        post_page = self.get_posts().filter(slug=slug).first()
+        if not post_page:
+            raise Http404
+        return post_page.serve(request)
+
     
 
 class BlogPageTag(TaggedItemBase):
@@ -135,6 +143,11 @@ class BlogTagIndexPage(Page):
     template = "blog/blog_tag_index.html"
     max_count = 1
 
+    subpage_types = []
+    parent_page_types = [
+        'blog.BlogIndexPage'
+        ]
+
     def get_context(self, request):
 
         # Filter by tag
@@ -147,19 +160,59 @@ class BlogTagIndexPage(Page):
         return context
 
 
-class BlogCategoryIndexPage(Page):
-    template = "blog/blog_category_index.html"
-    max_count = 1
+
+class BlogListingPage(RoutablePageMixin, Page):
+    template = "blog/blog_listing_page.html"
+    max_count = 5 #this shows how many pages can be created in this model which is 5
+
+    subpage_types = ['blog.BlogPage']
+    parent_page_types = [
+        'blog.BlogIndexPage'
+        ]
+    
+    description = RichTextField(blank=True)
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        blank=False,
+        null=True,
+        related_name="+",
+        on_delete=models.SET_NULL,
+        )
+    color = models.CharField(choices=color, max_length=100, blank=True, default='W', help_text='Change Text color')
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            
+            FieldPanel('description', classname="title"),
+            FieldPanel('color'),
+            ], heading='Additional Information'),
+        ImageChooserPanel('image'),
+    ]
+
 
     def get_context(self, request):
-
-        # Filter by tag
-        """tag = request.GET.get('tag')
-        blogpages = BlogPage.objects.filter(tags__name=tag)"""
-
-        # Update template context
+        # Update context to include only published posts, ordered by reverse-chron
         context = super().get_context(request)
-        context['catgories'] = BlogCategory.objects.all()
+        blogpages = BlogListingPage.get_children(self,).live().order_by('-first_published_at')
+        #blogpages = BlogPage.objects.live().public().order_by('-first_published_at')
+
+        if request.GET.get('tag', None):
+            tags = request.GET.get('tag')
+            all_posts = all_posts.filter(tags__slug__in=[tags])
+        
+
+        paginator = Paginator(blogpages, 20)
+
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        context['posts'] = posts
+        context['categories'] = BlogCategory.objects.all()
         return context
 
     
@@ -168,7 +221,7 @@ class BlogPage(RoutablePageMixin, Page):
     template = "blog/blog_page.html"
     subpage_types = []
     parent_page_types = [
-        'blog.BlogIndexPage'
+        'blog.BlogListingPage'
         ]
     last_update = models.DateTimeField(default=timezone.now, verbose_name='Last Updated')
     date = models.DateField("Post date")
@@ -223,16 +276,27 @@ class BlogPage(RoutablePageMixin, Page):
 
         try:
             category = BlogCategory.objects.get(slug=cat_slug)
-        except Exception:
-            category = None
+        except BlogCategory.DoesNotExist:
+            if category:
+                msg = 'There are no blog posts in "{}"'.format(tag)
+                messages.add_message(request, messages.INFO, msg)
+            return redirect(self.url)
 
-        if category is None:
-            pass
-
-        context['posts'] = BlogPage.objects.live().public().filter(categories__in=[category])
+        posts = self.get_posts(category=cat_slug)
+        context = {
+            'category': category,
+            'posts': posts
+            }
         #context['posts'] = category
         return render(request, 'blog/blog_category_index.html', context)
 
+    def get_posts(self, category=None):
+        posts = BlogPage.objects.live().descendant_of(self)
+        if category:
+            posts = posts.filter(categories=category)
+        return posts
+
+   
 
 class BlogPageGalleryImage(Orderable):
     page = ParentalKey(BlogPage, on_delete=models.CASCADE, related_name='gallery_images')
@@ -288,3 +352,53 @@ class BlogPageBlogCategory(models.Model):
 
     class Meta:
         unique_together = ('page', 'blog_category')
+
+
+class KnowledgeBase(Page):
+
+    template = 'knowledgebase.html'
+
+    subpage_types = []
+    parent_page_types = [
+        'blog.BlogIndexPage',
+    ]
+    
+    date = models.DateTimeField(default=timezone.now, verbose_name='Date')
+    body = RichTextField()
+    #tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('date'),
+        FieldPanel('body', classname="full"),
+        #FieldPanel('tags'),
+    ]
+
+    class Meta:
+        verbose_name = 'KnowledgeBase'
+        verbose_name_plural = 'KnowledgeBase'
+
+
+    def get_context(self, request):
+        # Update context to include only published posts, ordered by reverse-chron
+        context = super().get_context(request)
+        all_posts = KnowledgeBase.objects.live().public().order_by('-first_published_at')
+
+
+        paginator = Paginator(all_posts, 1)
+
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        context['posts'] = posts
+        return context
+
+"""
+KnowledgeBase._meta.get_field('title').blank=True
+KnowledgeBase._meta.get_field('title').default='KnowledgeBase'
+KnowledgeBase._meta.get_field('slug').default='knowledgeBase'
+"""

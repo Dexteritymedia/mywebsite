@@ -32,13 +32,6 @@ class MenuItem(Orderable):
         related_name='+',
         on_delete=models.CASCADE,
         )
-    link_category = models.ForeignKey(
-        'blog.BlogCategory',
-        null=True,
-        blank=True,
-        related_name='+',
-        on_delete=models.CASCADE,
-        )
     open_in_new_tab = models.BooleanField(default=False, blank=True)
 
     page = ParentalKey('Menu', related_name='menu_items')
@@ -48,7 +41,6 @@ class MenuItem(Orderable):
         FieldPanel('link_title'),
         FieldPanel('link_url'),
         PageChooserPanel('link_page'),
-        SnippetChooserPanel('link_category'),
         FieldPanel('open_in_new_tab'),
     ]
 
@@ -58,8 +50,6 @@ class MenuItem(Orderable):
             return self.link_page.url
         elif self.link_url:
             return self.link_url
-        if self.link_category:
-            return self.link_category.slug
         return '#'
 
     @property
@@ -68,8 +58,6 @@ class MenuItem(Orderable):
             return self.link_page.title
         elif self.link_title:
             return self.link_title
-        elif self.link_category and not self.link_title:
-            return self.link_category
         return 'Missing Title'
 
 
@@ -78,57 +66,20 @@ class MenuItem(Orderable):
     """This is for the Validation"""
     
     def clean(self, *args, **kwargs):
-        if not self.link_page and not self.link_category and not self.link_url:
-            msg = _('Please choose an internal page or custom URL or choose a category')
+        if not self.link_page and not self.link_url:
+            msg = _('Please choose an internal page or custom URL')
             raise ValidationError({'link_page': msg})
-        if self.link_url and self.link_page and self.link_category:
-            msg = _('Linking to a page, a category and custom URL is not permitted')
-            raise ValidationError({'link_page': msg, 'link_url':msg, 'link_category':msg})
+        if self.link_url and self.link_page:
+            msg = _('Linking to a page, and custom URL is not permitted')
+            raise ValidationError({'link_page': msg, 'link_url':msg})
         if self.link_url and self.link_page:
             msg = _('Linking to a page and custom URL is not permitted')
             raise ValidationError({'link_page': msg, 'link_url':msg})
-        if self.link_url and self.link_category:
-            msg = _('Linking to a category and custom URL is not permitted')
-            raise ValidationError({'link_url':msg, 'link_category':msg})
-        if self.link_page and self.link_category:
-            msg = _('Linking to a page, and a category is not permitted')
-            raise ValidationError({'link_page': msg, 'link_category':msg})
         if self.link_url and not self.link_title:
             msg = _('This field is required when linking to a custom URL')
             raise ValidationError({'link_title': msg})
         super().clean(*args, **kwargs)
 
-"""
-    def clean(self):
-        if self.link_page is not None and self.link_category is not None:
-            raise ValidationError('Select either the link page or the link category')
-        if self.link_url is not None and self.link_page is not None:
-            raise ValidationError('Select one of either link url or link page')
-        if self.link_url is not None and self.link_category is not None:
-            raise ValidationError('Select link url or link category')
-        
-       # if self.link_page is None and self.link_category is None:
-            #raise ValidationError('Fill Just one')
-        if self.link_url is None and self.link_category is None:
-            raise ValidationError('Fill Just one')
-        if self.link_page is None and self.link_url is None:
-            raise ValidationError('Fill Just one')
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
-    
-    def save(self, *args, **kwargs):
-        if self.link_page is not None and self.link_category is not None:
-            raise Exception('Select only one')
-        if self.link_page is None and self.link_category is None:
-            raise Exception('Select just one')
-        if self.link_url is not None and self.link_page is not None:
-            raise Exception('Select only one')
-        if self.link_url is not None and self.link_category is not None:
-            raise Exception('Select only one')
-
-        return super().save()"""
 
 
 @register_snippet
@@ -158,6 +109,9 @@ class Menu(ClusterableModel):
 
 @register_snippet
 class FooterText(models.Model):
+
+    max_count = 1
+    
     title = models.CharField(max_length=255, blank=True)
     body = RichTextField()
 

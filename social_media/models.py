@@ -12,7 +12,8 @@ class SocialMediaSettings(BaseSetting):
     twitter = models.URLField(max_length=100, default='www.twitter.com/', null=True, blank=True, help_text='Twitter URL')
     pinterest = models.URLField(max_length=100, default='www.pinterest.com/', null=True, blank=True, help_text='Pinterest URL')
     linkedin = models.URLField(max_length=100, default='www.linkedin.com/', null=True, blank=True, help_text='Linkedin URL')
-
+    whatsapp = models.CharField(max_length=100, default='Enter your WhatsApp number', null=True, blank=True, help_text='Whatsapp Number')
+    
     panels = [
         MultiFieldPanel([
             
@@ -21,6 +22,7 @@ class SocialMediaSettings(BaseSetting):
             FieldPanel('twitter'),
             FieldPanel('pinterest'),
             FieldPanel('linkedin'),
+            FieldPanel('whatsapp'),
         ], heading="Social Media")
         ]
 
@@ -40,14 +42,21 @@ class SiteSettings(BaseSetting):
         related_name='+'
     )
     caption = models.CharField(blank=True, max_length=250)
+    show_in_menu_bar = models.BooleanField(default=False, blank=True, help_text='Select to show logo in menu bar', verbose_name='Menu Logo',)
+    show_title_in_menu_bar = models.BooleanField(default=False, blank=True, help_text='Select to show Title in menu bar', verbose_name='Menu Title',)
 
     panels = [
-        FieldPanel('site_name'),
+        MultiFieldPanel([
+            FieldPanel('site_name'),
+            FieldPanel('show_title_in_menu_bar'),
+            ]),
         
         MultiFieldPanel([
             ImageChooserPanel('site_logo'),
+            FieldPanel('show_in_menu_bar'),
             FieldPanel('caption'),
         ], heading="Website Image")
+        
 
         ]
 

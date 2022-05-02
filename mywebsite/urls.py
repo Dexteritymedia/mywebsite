@@ -8,10 +8,19 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 from search import views as search_views
 
-urlpatterns = [
-    path('django-admin/', admin.site.urls),
+import environ
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 
-    path('admin/', include(wagtailadmin_urls)),
+
+SECRET_ADMIN = env('SECRET_ADMIN')
+DJANGO_ADMIN = env('DJANGO_ADMIN')
+
+urlpatterns = [
+    path(f'{DJANGO_ADMIN}/', admin.site.urls),
+
+    path(f'admin_{SECRET_ADMIN}/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
 
     path('search/', search_views.search, name='search'),

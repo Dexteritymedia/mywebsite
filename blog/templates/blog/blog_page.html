@@ -8,6 +8,8 @@
 <div class="container">
 <div class="row">
 <div class="col-12 mt-5">
+		
+	<a href="{{ page.get_parent.url }}"><button class="btn btn-primary btn-sm" role="button">{{ page.get_parent.title|title }}</button></a>
 
     <h1>{{ page.title|title }}</h1>
     
@@ -18,22 +20,9 @@
             <figcaption class="figure-caption text-center">{{ item.caption }}</figcaption>
 			</figure>
 			
-			
-			<div class="row">
-	{% with categories=self.categories.all %}
-    {% if categories %}
-	<p class="col-2">
-	{% for category in categories %}
-	<a href="{% routablepageurl page "category_view" category.slug %}">
-	{% image category.icon fill-32x32 style="vertical-align: middle" %}
-                    {{ category.name|title }}
-					</a>
-					{% endfor %}
-        </p>
-		{% endif %}
-		{% endwith %}
-	<p class="col-5 text-muted">{{ page.date }}</p>
-	</div>
+	
+		<div>Published: <i class="far fa-calendar-alt fa-sm" aria-hidden="true"></i> {{ page.date }}</div>
+	
 	
 	
 	{% if page.subtitle %}
@@ -54,12 +43,11 @@
     </div>
 {% endif %}
 
-
-    <p><a href="{{ page.get_parent.url }}" style="color: blue;">Return to blog</a></p>
 	
 </div>
 </div>
 
+{% if related %}
 <h2 class="text-center"><div class="btn btn-primary btn-lg" role="button" disabled>Related Posts</div></h2>
 
 <div class="row mb-5">
@@ -81,5 +69,6 @@
 
 
 </div>
+{% endif %}
 </div>
 {% endblock %}

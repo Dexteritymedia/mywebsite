@@ -6,7 +6,7 @@ from wagtail.admin.edit_handlers import FieldPanel
 
 
 class HomePage(Page):
-    max_count = 0
+    max_count = 1
     
     body = RichTextField(blank=True)
 

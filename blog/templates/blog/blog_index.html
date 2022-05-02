@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
-{% load wagtailimages_tags wagtailcore_tags %}
+{% load wagtailimages_tags wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block body_class %}template-blogindexpage{% endblock %}
 
 {% block content %}
 <br>
+{% if carousel_images %}
 	<div class="container">
 	<div id="carouselExampleFade" class="carousel slide carousel-fade mt-4" data-bs-ride="carousel">
 		<div class="carousel-inner">
@@ -40,6 +41,7 @@
 	
 	</div>
 	</div>
+	{% endif %}
 	
 	<div class="container">
 		<div class="row row-cols-1 row-cols-md-3 g-4 mt-3 mb-3">
@@ -50,17 +52,25 @@
 					<a href="{{ post.url }}">
 					{% image post.image original as blog_img %}
 						<img src="{{ blog_img.url }}" class="card-img-top" alt="{{ blog_img.alt }}">
+						<div class="card-img-overlay">
+						<button class="btn btn-primary btn-sm" role="button">
+						{{ post.get_parent.title|title }}
+						</button>
+						</div>
 							<div class="card-body">
 								<h2 class="card-title">{{ post.title|title }}</h2>
 								</a>
-								{% with categories=self.categories.all %}
+								{% with categories=page.categories.all %}
 								{% if categories %}
-								{% for cat in categories %}
+								{% for cat in post.categories %}
+								<a>
 								<h5 class="card-title">{{ cat.name|title }}</h5>
+								</a>
 								{% endfor %}
 								{% endif %}
 								{% endwith %}
 								<p class="card-text">
+								<i class="far fa-calendar-alt fa-lg" aria-hidden="true"></i>
 								<small class="text-muted">{{ post.date }}</small>
 								</p>
 								<a href="{{ post.url }}">

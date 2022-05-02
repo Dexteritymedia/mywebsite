@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'blog',
     'social_media',
     'flex',
-
+    'contact',
+    
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.settings',
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
 
     'modelcluster',
     'taggit',
+    'crispy_forms',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -108,8 +110,12 @@ WSGI_APPLICATION = 'mywebsite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT':'',
     }
 }
 
@@ -188,3 +194,5 @@ WAGTAILSEARCH_BACKENDS = {
 BASE_URL = 'http://example.com'
 
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

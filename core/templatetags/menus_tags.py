@@ -9,7 +9,7 @@ def get_menu(slug):
     return Menu.objects.filter(slug=slug).first()
 
 
-@register.inclusion_tag('core/templates/includer/footer_text.html', takes_context=True)
+@register.inclusion_tag('include/footer_text.html', takes_context=True)
 def get_footer_text(context):
     footer_text = ''
     if FooterText.objects.first() is not None:

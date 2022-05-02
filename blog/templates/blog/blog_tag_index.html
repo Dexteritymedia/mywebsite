@@ -7,20 +7,10 @@
 <div class="row mt-5">
 
     {% if request.GET.tag %}
-        <h1 class="mt-3">Showing pages tagged: {{ request.GET.tag }}</h1>
+        <h1 class="mt-3">Showing Posts tagged: {{ request.GET.tag }}</h1>
     {% endif %}
 
     {% for blogpage in blogpages %}
-
-          <p>
-              <strong><a href="{% pageurl blogpage %}">{{ blogpage.title }}</a></strong><br />
-              <small>Revised: {{ blogpage.latest_revision_created_at }}</small><br />
-              {% if blogpage.author %}
-                <p>By {{ blogpage.author.profile }}</p>
-              {% endif %}
-          </p>
-		  
-		  
 		  
 		  <div class="shadow p-3 mb-5 bg-body rounded">
 	<a href="{% pageurl blogpage %}">
