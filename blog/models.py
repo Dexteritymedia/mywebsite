@@ -143,7 +143,7 @@ class BlogTagIndexPage(Page):
     template = "blog/blog_tag_index.html"
     max_count = 1
 
-    subpage_types = []
+    subpage_types = ['blog.BlogPage']
     parent_page_types = [
         'blog.BlogIndexPage'
         ]
@@ -163,7 +163,7 @@ class BlogTagIndexPage(Page):
 
 class BlogListingPage(RoutablePageMixin, Page):
     template = "blog/blog_listing_page.html"
-    max_count = 5 #this shows how many pages can be created in this model which is 5
+    max_count = 10 #this shows how many pages can be created in this model which is 10
 
     subpage_types = ['blog.BlogPage']
     parent_page_types = [
@@ -268,27 +268,6 @@ class BlogPage(RoutablePageMixin, Page):
         context['related'] = related
         return context
 
-    @route(r'^(?P<cat_slug>[-\w]*)/$', name='category_view')
-    @route(r'^c/(?P<cat_slug>[-\w]*)/$', name='category_view')
-    @route(r'^category/(?P<cat_slug>[-\w]*)/$', name='category_view')
-    def category_view(self, request, cat_slug):
-        context = self.get_context(request)
-
-        try:
-            category = BlogCategory.objects.get(slug=cat_slug)
-        except BlogCategory.DoesNotExist:
-            if category:
-                msg = 'There are no blog posts in "{}"'.format(tag)
-                messages.add_message(request, messages.INFO, msg)
-            return redirect(self.url)
-
-        posts = self.get_posts(category=cat_slug)
-        context = {
-            'category': category,
-            'posts': posts
-            }
-        #context['posts'] = category
-        return render(request, 'blog/blog_category_index.html', context)
 
     def get_posts(self, category=None):
         posts = BlogPage.objects.live().descendant_of(self)
@@ -354,21 +333,20 @@ class BlogPageBlogCategory(models.Model):
         unique_together = ('page', 'blog_category')
 
 
-class KnowledgeBase(Page):
+class KnowledgeBaseIndex(Page):
 
     template = 'knowledgebase.html'
 
-    subpage_types = []
+    subpage_types = [
+        'blog.KnowledgeBase'
+        ]
     parent_page_types = [
         'blog.BlogIndexPage',
     ]
-    
-    date = models.DateTimeField(default=timezone.now, verbose_name='Date')
+
     body = RichTextField()
-    #tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('date'),
         FieldPanel('body', classname="full"),
         #FieldPanel('tags'),
     ]
@@ -396,6 +374,54 @@ class KnowledgeBase(Page):
 
         context['posts'] = posts
         return context
+
+
+
+class KnowledgeBase(Page):
+
+    template = 'knowledgebase.html'
+
+    subpage_types = []
+    parent_page_types = [
+        'blog.KnowledgeBaseIndex',
+    ]
+    
+    date = models.DateTimeField(default=timezone.now, verbose_name='Date')
+    body = RichTextField()
+    #tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('date'),
+        FieldPanel('body', classname="full"),
+        #FieldPanel('tags'),
+    ]
+
+        
+    class Meta:
+        verbose_name = 'KnowledgeBase'
+        verbose_name_plural = 'KnowledgeBase'
+
+
+    def get_context(self, request):
+        # Update context to include only published posts, ordered by reverse-chron
+        context = super().get_context(request)
+        all_posts = KnowledgeBase.objects.live().public().order_by('-first_published_at')
+
+
+        paginator = Paginator(all_posts, 1)
+
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        context['posts'] = posts
+        return context
+
+
 
 """
 KnowledgeBase._meta.get_field('title').blank=True

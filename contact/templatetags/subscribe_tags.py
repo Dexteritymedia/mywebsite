@@ -7,8 +7,11 @@ register = template.Library()
 
 @register.inclusion_tag('subscribe_page.html', takes_context=True)
 def subscribe(context):
-
-    page = FormPage.objects.get(slug='subscribe')
+    try:
+        page = FormPage.objects.get(slug='subscribe')
+    except FormPage.DoesNotExist:
+        page = None
+    
 
     return {
         'page': page,

@@ -40,10 +40,10 @@ class FlexPage(Page):
             ('TOC_Article', blocks.TOC()),
             ('char_block', CharBlock(
                 required=True,
-                help_text='Add a Page',
+                help_text='',
                 min_length=10,
                 max_length=50,
-                template='core/char_block.html',
+                template='blocks/char_block.html',
                 icon = "title",
             ))
         ],
