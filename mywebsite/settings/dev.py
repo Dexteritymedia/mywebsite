@@ -14,7 +14,7 @@ DEBUG = env('DEBUG')
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: define the correct hosts in production!
-ALLOWED_HOSTS = ['*'] 
+ALLOWED_HOSTS = ['127.0.0.1', 'realnaira.herokuapp.com'] 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

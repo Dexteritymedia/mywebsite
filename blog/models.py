@@ -145,7 +145,7 @@ class BlogTagIndexPage(Page):
 
     subpage_types = ['blog.BlogPage']
     parent_page_types = [
-        'blog.BlogIndexPage'
+        'blog.BlogListingPage'
         ]
 
     def get_context(self, request):
@@ -194,7 +194,7 @@ class BlogListingPage(RoutablePageMixin, Page):
         # Update context to include only published posts, ordered by reverse-chron
         context = super().get_context(request)
         blogpages = BlogListingPage.get_children(self,).live().order_by('-first_published_at')
-        #blogpages = BlogPage.objects.live().public().order_by('-first_published_at')
+        all_posts = BlogPage.objects.live().public().order_by('-first_published_at')
 
         if request.GET.get('tag', None):
             tags = request.GET.get('tag')
