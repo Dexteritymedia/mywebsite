@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static wagtailimages_tags wagtailcore_tags %}
+
+{% block content %}
+
+<div class="container">
+<div class="row">
+<div class="col mb-5 mt-3">
+<br/>
+
+
+ <div class="row d-flex justify-content-center">
+  {% for post in posts %}
+{% if post.body %}
+<div class="col-auto">
+  <p class="pt-2">
+<strong>{{ post.body|richtext|safe }}</strong>
+</p>
+</div>
+{% endif %}
+{% endfor %}
+
+
+</div>
+
+</div>
+</div>
+</div>
+
+{% endblock %}

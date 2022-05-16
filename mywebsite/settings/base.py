@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'social_media',
     'flex',
     'contact',
+    'chart',
     
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -55,10 +56,13 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.admin',
     'wagtail.core',
+    'wagtail.contrib.table_block',
 
     'modelcluster',
     'taggit',
     'crispy_forms',
+    'storages',
+    'slick_reporting',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -120,9 +124,6 @@ DATABASES = {
     }
 }
 
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -175,7 +176,6 @@ STATICFILES_DIRS = [
 # See https://docs.djangoproject.com/en/4.0/ref/contrib/staticfiles/#manifeststaticfilesstorage
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
@@ -203,3 +203,5 @@ BASE_URL = 'http://example.com'
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'

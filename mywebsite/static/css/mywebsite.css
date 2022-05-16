@@ -7,6 +7,33 @@ body {
 			font-size: 22px;
 		}
 	}
+	
+	
+#pot {
+	bottom: 15%;
+	position: absolute;
+	-webkit-animation: linear;
+	-webkit-animation-name: run;
+	-webkit-animation-duration: 5s;
+}
+@-webkit-keyframes run {
+	0% {
+		left: 0;
+	}
+	50% {
+		left: 100%;
+	}
+	100% {
+		left: 0;
+	}
+}
+
+img.blackwhite {
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
+}
+	
+	
 .box-shadow-hover:hover {
 	box-shadow: 0 2px 5px 0 
 	rgba(0, 0, 0, 0.5), 0

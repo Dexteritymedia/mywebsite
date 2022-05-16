@@ -158,6 +158,116 @@ class CardBlock(blocks.StructBlock):
         label = "Cards"
 
 
+class JumbotronBlock(blocks.StructBlock):
+
+    jumbotron = blocks.ListBlock(
+        blocks.StructBlock(
+            [
+                ('image', ImageChooserBlock(required=False)),
+                ('subtitle', blocks.CharBlock(required=False, max_length=40)),
+                ('body', blocks.RichTextBlock(required=True, features=['h1','h2','h3','h4','h5','h6','hr','bold','italic','link'],)),
+                ('color', blocks.CharBlock(required=False, max_length=40, help_text="Enter a hexdecimal color for the background e.g #000000")),
+                ('button_page', blocks.PageChooserBlock(required=False)),
+                ('button_url', blocks.URLBlock(required=False, help_text='If the button page above is selected, that will be used first')),
+            ]
+        )
+    )
+
+
+    class Meta:
+        template = "blocks/jumbotron_block.html"
+        icon = "list-ul"
+        label = "Jumbotron"
+        max_num = 1
+
+
+class JumbotronBlockWithTextColor(blocks.StructBlock):
+
+    jumbotron = blocks.ListBlock(
+        blocks.StructBlock(
+            [
+                ('image', ImageChooserBlock(required=False)),
+                ('title', blocks.CharBlock(required=False, max_length=40)),
+                ('description', blocks.RichTextBlock(required=False, features=['h1','h2','h3','h4','h5','h6','hr','bold','italic','link'],)),
+                ('color', blocks.CharBlock(required=False, max_length=40, help_text="Enter a hexdecimal color for the background e.g #000000")),
+                ('text_color', blocks.CharBlock(required=False, max_length=40, help_text="Enter a hexdecimal color for the text e.g #000000 or red")),
+            ]
+        )
+    )
+
+
+    class Meta:
+        template = "blocks/jumbotron_text_block.html"
+        icon = "list-ul"
+        label = "Jumbotron"
+        max_num = 1
+
+
+        
+"""
+Navigation with Sub-Links
+
+"""
+
+
+class NavExternalLinkBlock(blocks.StructBlock):
+    title = blocks.CharBlock(
+        required=True,
+        label='Title',
+        max_length=200,
+        )
+    link = blocks.CharBlock(
+        required=False,
+        label='URL'
+        )
+
+    class Meta:
+        template = 'blocks/external_link_block.html'
+        label = 'External Link'
+
+
+class NavPageLinkBlock(blocks.StructBlock):
+    page = blocks.PageChooserBlock()
+
+
+    class Meta:
+        template = 'blocks/page_link_block.html'
+        label = 'Page Link'
+    
+
+class NavSubLinkBlock(blocks.StructBlock):
+    display_text = blocks.CharBlock(
+        required=False,
+        max_length=255,
+    )
+    sub_links = blocks.StreamBlock(
+
+        [
+            ('page_link', NavPageLinkBlock()),
+            ('external_link', NavExternalLinkBlock()),
+        ],
+        required=False,
+        label='Sub-links',
+        )
+        
+
+class NavExternalLinkWithSubLinkBlock(NavSubLinkBlock, NavExternalLinkBlock):
+    class Meta:
+        label = 'External Link with sub-links'
+    
+
+class NavPageLinkWithSubLinkBlock(NavSubLinkBlock, NavPageLinkBlock):
+    show_child_links = blocks.BooleanBlock(
+        required=False,
+        default=False,
+        )
+
+    class Meta:
+        label = 'Page Link with sub-links'
+
+
+
+    
 class TOC(blocks.StructBlock):
     header = blocks.CharBlock(required=False)
     content = blocks.RichTextBlock(required=False)
@@ -167,3 +277,6 @@ class TOC(blocks.StructBlock):
         template = "blocks/TOC.html"
         icon = "plus"
         label = "Article with TOC"
+
+
+    

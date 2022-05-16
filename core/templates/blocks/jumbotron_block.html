@@ -1,0 +1,32 @@
+{% load wagtailimages_tags %}
+
+{% for content in self.jumbotron %}
+
+{% if content.image %}
+{% image content.image fill-1200x300 as img %}
+<div class="p-5 text-center" style="background-image: url('{{ img.url }}'); background-size: cover;">
+{% elif content.color %}
+<div class="p-5 text-center" style="background-color: {{ content.color }} ;">
+{% else %}
+<div class="p-5 text-center bg-light">
+{% endif %}
+
+<h1 class="mb-3 mt-3">{{ content.body|title|safe }}</h1>
+
+{% if content.subtitle %}
+<h4 class="mb-3">{{ content.subtitle }}</h4>
+{% endif %}
+
+{% if content.button_page %}
+						<a href="{{ content.button_page.url }}" class="btn btn-primary">
+						Learn More
+						</a>
+					{% elif content.button_url %}
+						<a href="{{ content.button_url }}" class="btn btn-primary">
+							Learn More
+						</a>
+					{% endif %}
+</div>
+</div>
+</div>
+{% endfor %}

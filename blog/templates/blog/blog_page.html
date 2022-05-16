@@ -28,6 +28,12 @@
 	{% if page.subtitle %}
     <h3 class="text-muted fst-italic">{{ page.subtitle }}</h3>
 	{% endif %}
+	
+	{% if page.categories2.all %}
+	{% for post_category in page.categories2.all %}
+	<p>{{ post_category.blog_category }}</p>
+	{% endfor %}
+	{% endif %}
 
 
     <p>{{ page.body|richtext }}</p>

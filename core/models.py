@@ -7,10 +7,12 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
 from wagtail.core.models import Orderable
-from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
+from wagtail.core.fields import RichTextField, StreamField
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
+
+from core import blocks
 
 
 
@@ -34,6 +36,15 @@ class MenuItem(Orderable):
         )
     open_in_new_tab = models.BooleanField(default=False, blank=True)
 
+    menu_items = StreamField(
+        [
+            ('Sub_Links', blocks.NavSubLinkBlock()),
+        ],
+        null=False,
+        blank=True,
+        verbose_name='Dropdown'
+     )
+
     page = ParentalKey('Menu', related_name='menu_items')
 
 
@@ -42,6 +53,7 @@ class MenuItem(Orderable):
         FieldPanel('link_url'),
         PageChooserPanel('link_page'),
         FieldPanel('open_in_new_tab'),
+        StreamFieldPanel('menu_items'),
     ]
 
     @property

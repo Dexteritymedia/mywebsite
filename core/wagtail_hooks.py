@@ -3,6 +3,7 @@ from wagtail.contrib.modeladmin.options import ( ModelAdmin, ModelAdminGroup, mo
 from blog.models import BlogPage, KnowledgeBase
 from flex.models import FlexPage
 from contact.models import FormPage
+from chart.models import DataPage
 
 #to change the name "Snippets" to Overview in wagtail admin sidebar
 @hooks.register('construct_main_menu')
@@ -56,6 +57,18 @@ class FormAdmin(ModelAdmin):
     exclude_from_explorer = False
 
 modeladmin_register(FormAdmin)
+
+class DataAdmin(ModelAdmin):
+    model = DataPage
+    menu_label = 'Data'
+    menu_icon = 'list-ul'
+    menu_order = 160
+    add_to_seetings_menu = False
+    exclude_from_explorer = False
+    list_display = ('title', 'date', 'last_update')
+    search_fields = ('title', 'body')
+
+modeladmin_register(DataAdmin)
 
 #to change the name "Pages" to Overview in wagtail admin sidebar
 @hooks.register('construct_main_menu')

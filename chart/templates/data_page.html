@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+
+{% block body_class %}template-blogpage{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="row">
+<div class="col-12 mt-5">
+		
+	<a href="{{ page.get_parent.url }}"><button class="btn btn-primary btn-sm" role="button">{{ page.get_parent.title|title }}</button></a>
+
+    <h1>{{ page.title|title }}</h1>
+    
+	
+	{% image self.image original as banner %}
+	<figure class="figure">
+		<img src="{{ banner.url }}" class="figure-img img-fluid rounded" alt="{{ banner.alt }}">
+            <figcaption class="figure-caption text-center">{{ item.caption }}</figcaption>
+			</figure>
+	
+	
+	{% if page.subtitle %}
+    <h3 class="text-muted fst-italic">{{ page.subtitle }}</h3>
+	{% endif %}
+
+{% for block in page.content %}
+	{% include_block block %}
+{% endfor %}
+
+	
+</div>
+</div>
+
+</div>
+{% endblock %}

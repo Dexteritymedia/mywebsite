@@ -3,39 +3,11 @@
 
 {% block content %}
 
-<div class="container-fluid">
-<div class="row">
+{% for block in page.heading %}
+	{% include_block block %}
+{% endfor %}
+
 {% if posts %}
-	<div class="card text-center mt-5">
-	{% image page.image fill-1200x300 as img_icon %}
-	<img src="{{ img_icon.url }}" class="card-img" alt="{{ img_icon.alt }}">
-	<div class="card-img-overlay mt-5">
-	{% if page.color == 'W' %}
-                   <h4 class="display-4 card-title text-white"> {{ page.title|title }}</h4>
-				   {% if page.description %}
-				   <h6 class="display-4 card-title text-white"> {{ page.description|safe }}</h6>
-				   {% endif %}
-	{% elif page.color == 'B' %}
-			<h4 class="display-4 card-title" style="color:black;">{{ page.title|title }}</h4>
-			{% if page.description %}
-				   <h6 class="display-4 card-title" style="color:black;"> {{ page.description|safe }}</h6>
-				   {% endif %}
-	{% elif page.color == 'R' %}
-			<h4 class="display-4 card-title" style="color:red;">{{ page.title|title }}</h4>
-			{% if page.description %}
-				   <h6 class="display-4 card-title" style="color:red;"> {{ page.description|safe }}</h6>
-				  {% endif %}
-	{% elif page.color == '' %}
-			<h4 class="display-4 card-title">{{ page.title|title }}</h4>
-			{% if page.description %}
-				   <h6 class="display-4 card-title"> {{ page.description|safe }}</h6>
-				  {% endif %}
-				  
-				   {% endif %}
-				</div>
-				</div>
-		</div>
-		</div>
 		
 <div class="container">
 <div class="row mt-5">
@@ -43,7 +15,7 @@
 
 {% for post in posts %}
 		  
-		  <div class="shadow p-3 mb-5 bg-body rounded">
+		  <div class="shadow p-3 mt-5 mb-5 bg-body rounded">
 	<a href="{% pageurl post %}">
 	<div class="card mb-3">
 	<div class="row g-0">

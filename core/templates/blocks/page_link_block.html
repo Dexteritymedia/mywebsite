@@ -1,0 +1,4 @@
+ {% load wagtailcore_tags %}
+ 
+ 
+ {% block url %}{% if value.page %}{% pageurl value.page %}{% endif %}{% endblock %}

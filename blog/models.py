@@ -9,14 +9,16 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 
 from wagtail.core.models import Page, Orderable
-from wagtail.core.fields import RichTextField
+from wagtail.core.fields import RichTextField, StreamField
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
+
+from core import blocks
 
 color = (
     ('', 'Select Title Color'),
@@ -169,24 +171,22 @@ class BlogListingPage(RoutablePageMixin, Page):
     parent_page_types = [
         'blog.BlogIndexPage'
         ]
-    
-    description = RichTextField(blank=True)
-    image = models.ForeignKey(
-        "wagtailimages.Image",
-        blank=False,
+
+
+    heading = StreamField(
+        [
+            
+            ('jumbotron', blocks.JumbotronBlockWithTextColor()),
+        ],
         null=True,
-        related_name="+",
-        on_delete=models.SET_NULL,
-        )
-    color = models.CharField(choices=color, max_length=100, blank=True, default='W', help_text='Change Text color')
+        blank=True,
+    )
+    
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
-            
-            FieldPanel('description', classname="title"),
-            FieldPanel('color'),
+            StreamFieldPanel('heading'),
             ], heading='Additional Information'),
-        ImageChooserPanel('image'),
     ]
 
 
@@ -379,7 +379,7 @@ class KnowledgeBaseIndex(Page):
 
 class KnowledgeBase(Page):
 
-    template = 'knowledgebase.html'
+    template = 'knowledgebase_page.html'
 
     subpage_types = []
     parent_page_types = [
