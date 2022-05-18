@@ -113,6 +113,8 @@ WSGI_APPLICATION = 'mywebsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+#postgresql database setup
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -124,7 +126,20 @@ DATABASES = {
     }
 }
 
+#mysql database setup
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': env('MYDB_NAME'),
+        'USER': env('MYDB_USER'),
+        'PASSWORD': env('MYDB_PASSWORD'),
+        'HOST': env('MYDB_HOST'),
+        'PORT':'',
+    }
+}
 
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

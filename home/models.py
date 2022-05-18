@@ -7,6 +7,8 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from modelcluster.fields import ParentalKey
 
 from core import blocks
+from blog.models import BlogPage
+from chart.models import DataPage
 
 
 class ImagesHomePage(Orderable):
@@ -41,7 +43,7 @@ class DataHomePage(Orderable):
 
     panels = [
 
-        PageChooserPanel('data_page'),
+        PageChooserPanel('data_page', ['chart.DataPage','blog.BlogPage']),
     ]
 
 
@@ -49,7 +51,7 @@ class BlogHomePage(Orderable):
 
     page = ParentalKey('home.HomePage', related_name='blog_pages', blank=True)
     blog_page = models.ForeignKey(
-        'wagtailcore.Page',
+        'blog.BlogPage',
         null=True,
         blank=True,
         related_name='+',
@@ -83,14 +85,14 @@ class HomePage(Page):
         StreamFieldPanel('content'),
         MultiFieldPanel(
             [FieldPanel('data_heading',),
-             InlinePanel('data_pages', max_num=5, min_num=3, label='Data Page',),
+             InlinePanel('data_pages', max_num=5, min_num=0, label='Data Page',),
              ],
             heading='Data Visual',
             classname='collapsible collapsed',
             ),
         MultiFieldPanel(
             [FieldPanel('blog_heading',),
-             InlinePanel('blog_pages', max_num=5, min_num=3, label='Blog Page',),
+             InlinePanel('blog_pages', max_num=5, min_num=0, label='Blog Page',),
              ],
             heading='Blog Pages',
             classname='collapsible collapsed',

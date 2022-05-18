@@ -27,36 +27,17 @@
 
 
 				{% if page.data_heading %}
-<h4 class="text-center">{{ page.data_heading }}</h4>
+<h4 class="text-center mt-5">{{ page.data_heading }}</h4>
 {% endif %}
 
 
-{% for loop_cycle in self.blog_pages.all %}
-				<div class="col-12 col-sm-6 mt-2 mb-5">
-					<div class="card">
-					<a href="{{ loop_cycle.blog_page.url }}">
-					{% image loop_cycle.specific.blog_page.image original as blog_img %}
-						<img src="{{ blog_img.url }}" class="card-img-top" alt="{{ blog_img.alt }}">
-						<div class="card-img-overlay">
-						<button class="btn btn-primary btn-sm" role="button">
-						{{ loop_cycle.blog_page.get_parent.title|title }}
-						</button>
+{% for loop_cycle in self.data_pages.all %}
+<div class="col-sm-6">
+					<a href="{{ loop_cycle.data_page.url }}">
+					{% image loop_cycle.data_page.specific.image original as data_img %}
+						<img src="{{ data_img.url }}" class="img-fluid mt-3 mb-5 text-center" alt="{{ data_img.alt }}">
+						</a>
 						</div>
-							<div class="card-body">
-								<h2 class="card-title">{{ loop_cycle.blog_page.title|title }}</h2>
-								</a>
-								<p class="card-text">
-								<i class="far fa-calendar-alt fa-lg" aria-hidden="true"></i>
-								</p>
-								<a href="{{ loop_cycle.blog_page.url }}">
-								<p class="card-text">
-								{{ loop_cycle.specific.blog_page.body|richtext|safe }}
-								</p>
-							</div>
-							</a>
-					</div>
-				</div>
-				
 		{% endfor %}
 
 		
@@ -68,8 +49,8 @@
 		{% for loop_cycle in self.blog_pages.all %}
 				<div class="col mt-5 mb-5">
 					<div class="card">
-					<a href="{{ loop_cycle.blog_page.get_parent.url }}">
-					{% image loop_cycle.specific.blog_page.image original as blog_img %}
+					<a href="{{ loop_cycle.blog_page.url }}">
+					{% image loop_cycle.blog_page.image original as blog_img %}
 						<img src="{{ blog_img.url }}" class="card-img-top" alt="{{ blog_img.alt }}">
 						<div class="card-img-overlay">
 						<button class="btn btn-primary btn-sm" role="button">
@@ -82,9 +63,9 @@
 								<p class="card-text">
 								<i class="far fa-calendar-alt fa-lg" aria-hidden="true">{{ loop_cycle.blog_page.date }}</i>
 								</p>
-								<a href="{{ loop_cycle.blog_page.url }}">
+								<a href="{{ loop_cycle.blog_page.get_parent.url }}">
 								<p class="card-text">
-								{{ loop_cycle.specific.blog_page.body|richtext|safe|truncatewords:50 }}
+								{{ loop_cycle.blog_page.body|richtext|safe|truncatewords:50 }}
 								</p>
 							</div>
 							</a>
@@ -94,9 +75,7 @@
 		{% endfor %}
 		
 
-</div>
-	
-		
+</div>	
 	</div>
 
 {% endblock %}
