@@ -334,15 +334,13 @@ class BlogPageBlogCategory(models.Model):
 
 
 class KnowledgeBaseIndex(Page):
-
+    
+    max_count = 1
     template = 'knowledgebase.html'
 
     subpage_types = [
         'blog.KnowledgeBase'
         ]
-    parent_page_types = [
-        'blog.BlogIndexPage',
-    ]
 
     body = RichTextField()
 
@@ -381,7 +379,9 @@ class KnowledgeBase(Page):
 
     template = 'knowledgebase_page.html'
 
-    subpage_types = []
+    subpage_types = [
+        'blog.KnowledgeBase'
+        ]
     parent_page_types = [
         'blog.KnowledgeBaseIndex',
     ]

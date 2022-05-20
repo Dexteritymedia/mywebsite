@@ -12,7 +12,7 @@
 {% endif %}
 
 {% if content.title %}
-<h1 class="mb-3" {% if content.text_color %}style="color: {{ content.text_color }};"{% endif %}>{{ content.title }}</h1>
+<h1 class="mb-3 mt-5" {% if content.text_color %}style="color: {{ content.text_color }};"{% endif %}>{{ content.title }}</h1>
 {% endif %}
 
 <h4 class="mb-3 mt-3" style="color:{% if content.text_color %} {{ content.text_color }} {% endif %};">{{ content.description|title|safe }}</h4>

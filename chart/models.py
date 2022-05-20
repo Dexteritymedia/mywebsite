@@ -50,10 +50,35 @@ class BitcoinChart(models.Model):
 
 
 class DataIndex(Page):
+    max_count = 1
+    template = 'data.html'
     subpage_types = [
         'chart.DataPage',
     ]
-    pass
+
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        all_posts = DataPage.objects.live().public().order_by('-first_published_at')
+
+
+        if request.GET.get('tag', None):
+            tags = request.GET.get('tag')
+            all_posts = all_posts.filter(tags__slug__in=[tags])
+        
+
+        paginator = Paginator(all_posts, 20)
+
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        context['posts'] = posts
+        return context
     
 
 class DataPage(Page):
@@ -70,6 +95,7 @@ class DataPage(Page):
         [
             ('full_richtext', blocks.RichtextBlock()),
             ('simple_richtext', blocks.SimpleRichtextBlock()),
+            ('image', blocks.ImageBlock()),
             ('table', TableBlock()),
         ],
         null=True,

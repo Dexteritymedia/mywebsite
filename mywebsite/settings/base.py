@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
@@ -220,3 +221,6 @@ WAGTAILEMBEDS_RESPONSIVE_HTML = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
+#to disable notification for wagtail updates
+#WAGTAIL_ENABLE_UPDATE_CHECK = False

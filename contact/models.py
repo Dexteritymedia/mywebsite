@@ -20,9 +20,7 @@ class FormPage(AbstractEmailForm):
         #app_name.model,
         'contact.FormPage',
     ]
-    parent_page_types = [
-        'blog.BlogIndexPage',
-    ]
+
 
     max_count = 3
     

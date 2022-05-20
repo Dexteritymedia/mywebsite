@@ -65,7 +65,7 @@ class DataAdmin(ModelAdmin):
     menu_order = 160
     add_to_seetings_menu = False
     exclude_from_explorer = False
-    list_display = ('title', 'date', 'last_update')
+    list_display = ('title', 'date',)
     search_fields = ('title', 'body')
 
 modeladmin_register(DataAdmin)

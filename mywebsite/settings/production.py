@@ -19,14 +19,20 @@ DATABASES['default'].update(db_from_env)
 
 SECRET_KEY = env('SECRET_KEY')
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
+"""
 COMPRESS_OFFLINE = True
 COMPRESS_CSS_FILTER = [
     'compressor.filters.css_default.CssAbsoluteFilter',
     'compressor.filters.cssmin.CssMinFilter',
 ]
 COMPRESS_CSS_HASHING_METHOD = 'content'
+"""
+
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_MANIFEST_STRICT = False
+WHITENOISE_ALLOW_ALL_ORIGINS = True
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 

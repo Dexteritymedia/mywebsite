@@ -8,6 +8,53 @@ body {
 		}
 	}
 	
+h1 {
+	font-weight: 900;
+	font-size: 32px;
+	font-family: 'Lato', serif;
+	position: relative;
+
+}
+
+h2 {
+	font-weight: 800;
+	font-size: 30px;
+	font-family: 'Lato', serif;
+	position: relative;
+
+}
+
+h3 {
+	font-weight: 700;
+	font-size: 28px;
+	font-family: 'Lato', serif;
+	position: relative;
+
+}
+
+h4 {
+	font-weight: 600;
+	font-size: 26px;
+	font-family: 'Lato', serif;
+	position: relative;
+
+}
+
+h5 {
+	font-weight: 500;
+	font-size: 24px;
+	font-family: 'Lato', serif;
+	position: relative;
+
+}
+
+h6 {
+	font-weight: 400;
+	font-size: 22px;
+	font-family: 'Lato', serif;
+	position: relative;
+
+}
 	
 #pot {
 	bottom: 15%;

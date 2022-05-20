@@ -22,9 +22,6 @@ class FlexPage(Page):
         #app_name.model,
         'flex.FlexPage',
     ]
-    parent_page_types = [
-        'blog.BlogIndexPage',
-    ]
 
     content = StreamField(
         [
