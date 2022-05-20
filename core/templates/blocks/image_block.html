@@ -11,6 +11,7 @@
 <figcaption class="figure-caption text-center">{{ self.caption }} - {{ self.attribution }}</figcaption>
 </figure>
 </div>
+
 {% elif self.shadow == 'R' %}
 <div class="shadow p-3 bg-body rounded">
 <figure class="figure">
@@ -27,6 +28,14 @@
 <figcaption class="figure-caption text-center">{{ self.caption }} - {{ self.attribution }}</figcaption>
 </figure>
 </div>
+{% elif self.shadow == '' %}
+<figure class="figure">
+{% image self.image original as banner %}
+<img src="{{ banner.url }}" class="figure-img img-fluid rounded" alt="{{ banner.alt }}">
+<figcaption class="figure-caption text-center">{{ self.caption }} - {{ self.attribution }}</figcaption>
+</figure>
+
 {% endif %}
+
 </div>
 </div>

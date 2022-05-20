@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 
 from wagtail.core.models import Page, Orderable
@@ -104,7 +105,7 @@ class DataPage(Page):
     subtitle = models.CharField(max_length=100, null=True, blank=True)
     image = models.ForeignKey(
         "wagtailimages.Image",
-        blank=False,
+        blank=True,
         null=True,
         related_name="+",
         on_delete=models.SET_NULL,
