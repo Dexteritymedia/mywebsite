@@ -18,10 +18,6 @@ from blog.models import BlogPage
 
 class FlexPage(Page):
     template = "flex/flex_page.html"
-    subpage_types = [
-        #app_name.model,
-        'flex.FlexPage',
-    ]
 
     content = StreamField(
         [

@@ -45,6 +45,7 @@
         <h3>Tags:
         {% for tag in page.tags.all %}
             <a class="btn btn-outline-secondary btn-lg" href="{% slugurl 'tags' %}?tag={{ tag }}" role="button">{{ tag }}</a>
+			 <a class="btn btn-outline-secondary btn-lg" href="{% pageurl page %}?tag={{ tag }}" role="button">{{ tag }}</a>
         {% endfor %}
 		</h3>
     </div>

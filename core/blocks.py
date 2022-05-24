@@ -203,6 +203,33 @@ class JumbotronBlockWithTextColor(blocks.StructBlock):
         max_num = 1
 
 
+class ContactBlock(blocks.StructBlock):
+    select = blocks.BooleanBlock(required=False, blank=True, help_text='Select to use 2 columns', verbose_name='Two Columns',)
+    background_color = blocks.CharBlock(required=False, max_length=60)
+    title = blocks.CharBlock(required=True, max_length=60)
+    text = blocks.TextBlock(required=True)
+    button_page = blocks.PageChooserBlock(required=False)
+    image = ImageChooserBlock(required=False)
+    button_text = blocks.CharBlock(required=False, default='Get in Touch', max_length=40)
+
+
+    class Meta:
+        template = "blocks/contact_block.html"
+        label = "Contact"
+        max_num = 1
+
+
+class HomePageCardBlock(blocks.StructBlock):
+    image = ImageChooserBlock(required=False)
+    title = blocks.CharBlock(required=True, max_length=60)
+    text = blocks.TextBlock(required=True)
+    button_page = blocks.PageChooserBlock(required=False)
+    button_text = blocks.CharBlock(required=False, default='Enter', max_length=40)
+
+
+    class Meta:
+        template = "blocks/homepage_card_block.html"
+        label = "Category"
         
 """
 Navigation with Sub-Links

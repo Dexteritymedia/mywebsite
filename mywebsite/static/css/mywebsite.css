@@ -141,7 +141,7 @@ body img {
 .topnav a {
   float: left;
   display: block;
-  color: #f2f2f2;
+  color: #0d6efd;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -149,16 +149,16 @@ body img {
 }
 
 .topnav a:hover {
-  background-color: #ddd;
-  color: black;
+  background-color: #0d6efd;
+  color: #0d6efd;
 }
 
 .topnav a.active {
-  background-color: #04AA6D;
+  background-color: #0d6efd;
   color: white;
 }
 
-.topnav .icon {
+.topnav .icon .logo {
   display: none;
 }
 
@@ -168,11 +168,15 @@ body img {
     float: right;
     display: block;
   }
+  .topnav a.logo {
+    float: right;
+    display: block;
+  }
 }
 
 @media screen and (max-width: 600px) {
   .topnav.responsive {position: relative;}
-  .topnav.responsive .icon {
+  .topnav.responsive .icon .logo {
     position: absolute;
     right: 0;
     top: 0;

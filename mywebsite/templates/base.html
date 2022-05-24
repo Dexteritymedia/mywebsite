@@ -26,7 +26,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/mywebsite.css' %}">
 		<link rel="shortcut icon" href="{% static 'images/bootstrap-icon' %}" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alegreya|Lora|Lato">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alegreya+Sana:wght@500|Righteous|Alegreya|Lora|Lato">
 
         {% block extra_css %}
             {# Override this in templates to add extra stylesheets #}
@@ -34,7 +34,7 @@
 		
 		<style>
 		body {
-	font-family:"Alegreya", Lora, serif;
+	font-family:"Alegreya", Alegreya Sans, Lora, serif;
 	font-size: 19px;
 }
 	@media (min-width: 768px) {
@@ -48,16 +48,6 @@
 		position: relative;
 	}
 	</style>
-	
-	<div class="topnav" id="myTopnav">
-  <a href="#home" class="active">Home</a>
-  <a href="#news">News</a>
-  <a href="#contact">Contact</a>
-  <a href="#about">About</a>
-  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-    <i class="fa fa-bars"></i>
-  </a>
-</div>
 		
 		{% if settings.social_media.SiteSettings.site_logo %}
 {% image settings.social_media.SiteSettings.site_logo max-30x30 as icon_image %}
@@ -79,15 +69,15 @@
   <div class="container-fluid">
   {% if settings.social_media.SiteSettings.show_title_in_menu_bar %}
   {% if settings.social_media.SiteSettings.site_name %}
-    <a class="navbar-brand" href="/">{{ settings.social_media.SiteSettings.site_name }}</a>
+    <a class="navbar-brand" href="/" style="font-family: Righteous; font-size: 35px;">{{ settings.social_media.SiteSettings.site_name }}</a>
 	{% endif %}
 	{% endif %}
 	{% if settings.social_media.SiteSettings.show_in_menu_bar %}
-	{% image settings.social_media.SiteSettings.site_logo max-50x50 as icon_image %}
+	{% image settings.social_media.SiteSettings.site_logo max-100x100 as icon_image %}
 	<a href="/" class="logo"><img src="{{ icon_image.url }}" alt="{{ settings.social_media.SiteSettings.site_name }}" class="img-fluid"></a>
 	{% endif %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+	  <i class="fa fa-bars text-white"></i>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -107,9 +97,9 @@
   </div>
 </nav>
 
-<p></p>
-
-  
+<p class="mb-5"></p>
+<br/>
+<br/>
 
   
         {% block content %}{% endblock %}

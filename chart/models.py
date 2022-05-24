@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
+from modelcluster.fields import ParentalKey
 
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import RichTextField
@@ -18,6 +19,9 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.contrib.table_block.blocks import TableBlock
 
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
+
+from blog.models import BlogCategory
 
 class BitcoinChart(models.Model):
     name = models.CharField(max_length=255, blank=True)
@@ -80,7 +84,68 @@ class DataIndex(Page):
 
         context['posts'] = posts
         return context
+
+
+
+class DataListingPage(Page):
+    template = "data_listing_page.html"
+
+    subpage_types = ['chart.DataPage']
+    parent_page_types = [
+        'chart.DataIndex'
+        ]
+
+
+    heading = StreamField(
+        [
+            
+            ('jumbotron', blocks.JumbotronBlockWithTextColor()),
+        ],
+        null=True,
+        blank=True,
+    )
     
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            StreamFieldPanel('heading'),
+            ], heading='Additional Information'),
+    ]
+
+
+    class Meta:
+        verbose_name = 'Data Category'
+        verbose_name_plural = 'Data Categories'
+
+
+
+    def get_context(self, request):
+        # Update context to include only published posts, ordered by reverse-chron
+        context = super().get_context(request)
+        blogpages = DataListingPage.get_children(self,).live().order_by('-first_published_at')
+        all_posts = DataPage.objects.live().public().order_by('-first_published_at')
+
+        if request.GET.get('tag', None):
+            tags = request.GET.get('tag')
+            all_posts = all_posts.filter(tags__slug__in=[tags])
+        
+
+        paginator = Paginator(blogpages, 20)
+
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        context['posts'] = posts
+        context['categories'] = BlogCategory.objects.all()
+        return context
+
+
+
 
 class DataPage(Page):
     template = 'data_page.html'
@@ -88,7 +153,7 @@ class DataPage(Page):
         'chart.DataPage',
     ]
     parent_page_types = [
-        'chart.DataIndex',
+        'chart.DataIndex', 'chart.DataListingPage'
     ]
     
     date = models.DateTimeField(default=timezone.now, verbose_name='Date')
@@ -97,7 +162,7 @@ class DataPage(Page):
             ('full_richtext', blocks.RichtextBlock()),
             ('simple_richtext', blocks.SimpleRichtextBlock()),
             ('image', blocks.ImageBlock()),
-            ('table', TableBlock()),
+            ('table', TableBlock(template='blocks/table_block.html')),
         ],
         null=True,
         blank=True,
@@ -111,9 +176,11 @@ class DataPage(Page):
         on_delete=models.SET_NULL,
         )
 
+    
     content_panels = Page.content_panels + [
         FieldPanel('date'),
         FieldPanel('subtitle'),
+        InlinePanel('data_categories', label="category", max_num=1),
         StreamFieldPanel('content'),
         ImageChooserPanel('image'),
     ]
@@ -121,4 +188,17 @@ class DataPage(Page):
     class Meta:
         verbose_name = 'Data'
         verbose_name_plural = 'Data'
+
+
+class DataPageBlogCategory(models.Model):
+    page = ParentalKey('chart.DataPage', on_delete=models.CASCADE, related_name='data_categories')
+    blog_category = models.ForeignKey(
+        'blog.BlogCategory', on_delete=models.CASCADE, related_name='data_pages')
+
+    panels = [
+        SnippetChooserPanel('blog_category'),
+        ]
+
+    class Meta:
+        unique_together = ('page', 'blog_category')
 

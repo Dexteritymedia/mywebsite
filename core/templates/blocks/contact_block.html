@@ -1,0 +1,46 @@
+{% load wagtailimages_tags %}
+
+{% if self.background_color %}
+<div class="p-5 text-center mb-5" style="background-color: {{ self.background_color }};">
+{% else %}
+<div class="p-5 text-center bg-light mb-5">
+{% endif %}
+<div class="row mb-5">
+{% if self.select %}
+<div class="col-sm-6">
+
+<h1 class="mb-3 mt-5">{{ self.title }}</h1>
+<p class="mb-3 mt-5">{{ self.text }}</p>
+
+{% if self.button_page %}
+<a class="btn btn-outline-secondary btn-lg mb-3" href="{{ self.button_page.url }}" role="button">{{ self.button_text }}</a>
+{% endif %}
+</div>
+
+<div class="col-sm-6">
+{% if self.image %}
+{% image self.image original as img %}
+<div class="p-5 text-center" style="background-image: url('{{ img.url }}'); background-size: contain;">
+</div>
+{% endif %}
+</div>
+{% else %}
+<div class="col-12">
+
+{% image self.image original as img %}
+<div class="p-5 text-center" style="background-image: url('{{ img.url }}'); height: 300px; width: 300px; background-size: cover;">
+</div>
+<h1 class="mb-3 mt-5">{{ self.title }}</h1>
+<p class="mb-3 mt-5">{{ self.text }}</p>
+
+{% if self.button_page %}
+<a class="btn btn-outline-secondary btn-lg" href="{{ self.button_page.url }}" role="button">{{ self.button_text }}</a>
+{% endif %}
+
+
+</div>
+{% endif %}
+</div>
+</div>
+<p class="mb-3"></p>
+

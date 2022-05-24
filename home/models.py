@@ -81,8 +81,27 @@ class HomePage(Page):
         blank=True,
     )
 
+    card = StreamField(
+        [
+            
+            ('card', blocks.HomePageCardBlock()),
+        ],
+        null=True,
+        blank=True,
+    )
+    
+    contact = StreamField(
+        [
+            
+            ('contact', blocks.ContactBlock()),
+        ],
+        null=True,
+        blank=True,
+    )
+
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
+        StreamFieldPanel('card'),
         MultiFieldPanel(
             [FieldPanel('data_heading',),
              InlinePanel('data_pages', max_num=5, min_num=0, label='Data Page',),
@@ -104,5 +123,6 @@ class HomePage(Page):
             heading='Images',
             classname='collapsible collapsed',
             ),
+        StreamFieldPanel('contact'),
     ]
     
