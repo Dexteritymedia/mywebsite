@@ -41,14 +41,9 @@ INSTALLED_APPS = [
     'flex',
     'contact',
     'chart',
-    'newsletter',
-
-    #'mjml',
-    'birdsong',
+    
     'wagtailseo',
     'wagtailcharts',
-    'wagtailfontawesome',
-    'wagtail_blocks',
     
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',

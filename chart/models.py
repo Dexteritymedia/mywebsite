@@ -30,8 +30,6 @@ from blog.models import BlogCategory
 
 from wagtail.admin.edit_handlers import TabbedInterface, ObjectList
 
-from wagtail_blocks.blocks import ChartBlock
-
 from core.blocks import VisualBlock
 
 class BitcoinChart(models.Model):
@@ -180,13 +178,6 @@ class DataPage(SeoMixin, Page):
         null=True,
         blank=True,
     )
-    body = StreamField(
-        [
-            ('chart', ChartBlock()),
-        ],
-        null=True,
-        blank=True,
-    )
     
     subtitle = models.CharField(max_length=100, null=True, blank=True)
     image = models.ForeignKey(
@@ -201,7 +192,6 @@ class DataPage(SeoMixin, Page):
     content_panels = Page.content_panels + [
         FieldPanel('date'),
         StreamFieldPanel('content'),
-        StreamFieldPanel('body'),
         ImageChooserPanel('image'),
     ]
 

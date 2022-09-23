@@ -4,11 +4,6 @@ from blog.models import BlogPage, KnowledgeBase
 from flex.models import FlexPage
 from contact.models import FormPage
 from chart.models import DataPage, DataListingPage
-from newsletter.models import NewsletterEmail, ExtendedContact
-
-from birdsong.options import CampaignAdmin
-
-from newsletter.filters import ContactFilter
 
 #to change the name "Snippets" to Overview in wagtail admin sidebar
 @hooks.register('construct_main_menu')
@@ -87,26 +82,6 @@ class DataListingAdmin(ModelAdmin):
     search_fields = ('title')
 
 modeladmin_register(DataListingAdmin)
-
-
-class NewsletterEmailAdmin(CampaignAdmin):
-    campaign = NewsletterEmail
-    menu_label = 'Newsletter'
-    menu_icon = 'mail'
-    menu_order = 200
-    contact_class = ExtendedContact
-    contact_filter_class = ContactFilter
-    
-modeladmin_register(NewsletterEmailAdmin)
-
-class ContactAdmin(ModelAdmin):
-    model = ExtendedContact
-    menu_label = 'Contacts'
-    menu_icon = 'user'
-    menu_order = 210
-    list_diplay = ('email', 'first_name', 'last_name', 'location')
-
-modeladmin_register(ContactAdmin)
 
 #to change the name "Pages" to Overview in wagtail admin sidebar
 @hooks.register('construct_main_menu')

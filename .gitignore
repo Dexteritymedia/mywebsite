@@ -24,7 +24,7 @@ wheels/
 .installed.cfg
 *.egg
 
-newsletter
+/newsletter/
 media
 static
 db.sqlite3
