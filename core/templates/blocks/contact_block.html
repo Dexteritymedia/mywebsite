@@ -20,16 +20,14 @@
 <div class="col-sm-6">
 {% if self.image %}
 {% image self.image original as img %}
-<div class="p-5 text-center" style="background-image: url('{{ img.url }}'); background-size: contain;">
-</div>
+<img src="{{ img.url }}" alt="{{ img.alt }}">
 {% endif %}
 </div>
 {% else %}
-<div class="col-12">
+<div class="col-sm-12 text-center">
 
 {% image self.image original as img %}
-<div class="p-5 text-center" style="background-image: url('{{ img.url }}'); height: 300px; width: 300px; background-size: cover;">
-</div>
+<img src="{{ img.url }}" class="img-fluid text-center d-block mx-auto" height="200" width="200" alt="{{ img.alt }}">
 <h1 class="mb-3 mt-5">{{ self.title }}</h1>
 <p class="mb-3 mt-5">{{ self.text }}</p>
 
@@ -40,6 +38,7 @@
 
 </div>
 {% endif %}
+</div>
 </div>
 </div>
 <p class="mb-3"></p>

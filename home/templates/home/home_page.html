@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load wagtailimages_tags wagtailcore_tags %}
+{% load static wagtailimages_tags wagtailcore_tags %}
 
 {% block body_class %}template{% endblock %}
 
@@ -16,17 +16,17 @@
 <div class="row">
 
 		{% if page.image_heading %}
-<h4 class="text-center mb-3 mt-3">{{ page.image_heading }}</h4>
+<h4 class="text-center mb-3 mt-5 display-4">{{ page.image_heading }}</h4>
 {% endif %}
 {% for loop_cycle in self.moving_images.all %}
 		{% image loop_cycle.image original as img %}
-		<div class="col">
+		<div class="col mt-3">
 <img src="{{ img.url }}" alt="{{ img.alt }}" class="img-fluid blackwhite" width="100px" height="100px">
 </div>
 {% endfor %}
 
 <div class="container">
-<div class="row">
+<div class="row mt-5">
 {% for block in page.card %}
 	{% include_block block %}
 {% endfor %}
@@ -57,7 +57,7 @@
 								</p>
 								<a href="{{ loop_cycle.blog_page.get_parent.url }}">
 								<p class="card-text">
-								{{ loop_cycle.blog_page.body|richtext|safe|truncatewords:50 }}
+								{{ loop_cycle.blog_page.body|richtext|safe|truncatewords:25 }}
 								</p>
 							</div>
 							</a>
@@ -70,68 +70,72 @@
 	</div>
 	
  <div class="container">
-        <div class="row mb-5">
-           
+        <div class="row mb-5 mb-3">
                 {% if page.data_heading %}
-<h4 class="text-center mt-3">{{ page.data_heading }}</h4>
-{% endif %}
-            
+<h4 class="text-center mt-3" style="font-size: 28px; font-weight: 900;">{{ page.data_heading }}<hr style="margin-top: 0; margin: auto; border: 3px solid; width: 80%; color: #0000ff;"></h4>
+{% endif %}            
 			
 <div id="carouselExampleInterval" class="carousel slide mt-4" data-bs-ride="carousel">
-<div class="carousel-inner">
 
+<div class="col-6 mb-5">
+
+<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+			<button class="btn-primary-sm"><i class="fa fa-arrow-left"></i></button>
+			<span class="visually-hidden">Previous</span>
+		</button>
+	
+<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+			<button class="btn-primary-sm"><i class="fa fa-arrow-right"></i></button>
+			<span class="visually-hidden">Next</span>
+		</button>
+
+</div>
+
+<div class="carousel-inner">
+<div class="card-group">
 {% for loop_cycle in self.data_pages.all %}
 <div class="carousel-item{% if forloop.counter == 1 %} active{% endif %}" data-bs-interval="2500">
 
 	<a href="{{ loop_cycle.data_page.url }}">
+	
 	
 	<div class="card mb-5">
 	<div class="row g-0">
 	
 	<div class="col-sm-4">
 	{% image loop_cycle.data_page.specific.image original as data_img %}
-	<img src="{{ data_img.url }}" class="img-fluid rounded-start" alt="{{ data_img.alt }}">
+	<img src="{{ data_img.url }}" class="blackwhite rounded-start img-top2" alt="{{ data_img.alt }}">
+	
+	{% comment %}<div class="p-5 text-center" style="background-image: url('{{ data_img.url }}'); background-size: cover;"></div>{% endcomment %}
+	
 	</div>
 	
 	<div class="col-sm-8">
 	<div class="card-body">
 	<h2 class="card-title">{{ loop_cycle.data_page.title|title }}</h2>
-	<p class="card-text">
-	<small class="text-muted">date</small>
-	</p>
-	<p class="card-text">{{ loop_cycle.data_page.specific.body|safe }}</</p>
+	<p class="card-text">{{ loop_cycle.data_page.specific.body|safe|truncatewords:25 }}</</p>
+	
+	{% comment %}
+	{% for block in loop_cycle.data_page %}
+	<p class="card-text">{{ block.value.full_richtext }}</p>
+	{% endfor %}
+	{% endcomment %}
+	
 	</div>
 	</div>
 	
+	</div>
 	</div>
 	</div>
 	
 	</a>
-	</div>
 	{% endfor %}
-	
+	</div>
 </div>
-
-<div class="col-6 text-right">
-
-<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-			<i class="fa fa-arrow-left"></i>
-			<span class="visually-hidden">Previous</span>
-		</button>
-	
-<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-			<i class="fa fa-arrow-right"></i>
-			<span class="visually-hidden">Next</span>
-		</button>
-
-</div>
-
 	</div>
 		
 </div>
 </div>
-
-
 	
 
 {% for block in page.contact %}

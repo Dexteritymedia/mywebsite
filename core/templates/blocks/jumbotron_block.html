@@ -11,19 +11,19 @@
 <div class="p-5 text-center bg-light">
 {% endif %}
 
-<h1 class="mb-3 mt-5">{{ content.body|title|safe }}</h1>
+<h1 class="mb-3 mt-5 text-white" style="font-size: 40px; font-weight: bold;">{{ content.subtitle|title }}</h1>
 
-{% if content.subtitle %}
-<h4 class="mb-3 mt-3">{{ content.subtitle }}</h4>
+{% if content.body %}
+<h4 class="mb-3 mt-3 text-white">{{ content.body|title|safe }}</h4>
 {% endif %}
 
 {% if content.button_page %}
-						<a href="{{ content.button_page.url }}" class="btn btn-primary">
-						Learn More
+						<a href="{{ content.button_page.url }}" class="btn btn-primary fw-bold">
+						Discover
 						</a>
 					{% elif content.button_url %}
-						<a href="{{ content.button_url }}" class="btn btn-primary">
-							Learn More
+						<a href="{{ content.button_url }}" class="btn btn-primary fw-bold">
+							Discover
 						</a>
 					{% endif %}
 </div>

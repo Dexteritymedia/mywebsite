@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+{% load wagtailcore_tags wagtailcharts_tags wagtailimages_tags wagtailroutablepage_tags %}
 
 {% block body_class %}template-blogpage{% endblock %}
 
@@ -8,8 +8,12 @@
 <div class="container">
 <div class="row">
 <div class="col-12 mt-5">
-		
+
+{% if page.get_parent.title != 'company' %}
+<h1>Uncategorized</h1>
+{% else %}
 	<a href="{{ page.get_parent.url }}"><button class="btn btn-primary btn-sm" role="button">{{ page.get_parent.title|title }}</button></a>
+	{% endif %}
 
     <h1 style="font-size: 30px; font-weight: 900;">{{ page.title|title }}</h1>
     
@@ -29,9 +33,17 @@
 	{% include_block block %}
 {% endfor %}
 
+{% for block in page.body %}
+	{% include_block block with block_id=block.id %}
+{% endfor %}
+
 	
 </div>
 </div>
 
 </div>
+{% endblock %}
+
+{% block extra_js %}
+{% render_charts %}
 {% endblock %}

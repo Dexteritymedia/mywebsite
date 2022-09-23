@@ -15,13 +15,24 @@ from core import blocks
 from wagtail.core.blocks import (
     CharBlock, ChoiceBlock, RichTextBlock, StreamBlock, StructBlock, TextBlock,
 )
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel
+from wagtail.admin.edit_handlers import (
+    FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel )
+
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
+from wagtailseo.models import SeoMixin, SeoType, TwitterCard
+
 from blog.models import BlogCategory
+
+
+from wagtail.admin.edit_handlers import TabbedInterface, ObjectList
+
+from wagtail_blocks.blocks import ChartBlock
+
+from core.blocks import VisualBlock
 
 class BitcoinChart(models.Model):
     name = models.CharField(max_length=255, blank=True)
@@ -56,10 +67,7 @@ class BitcoinChart(models.Model):
 
 class DataIndex(Page):
     max_count = 1
-    template = 'data.html'
-    subpage_types = [
-        'chart.DataPage',
-    ]
+    template = 'data_index.html'
 
 
     def get_context(self, request):
@@ -85,6 +93,10 @@ class DataIndex(Page):
         context['posts'] = posts
         return context
 
+
+    class Meta:
+        verbose_name = 'Mainpage'
+        verbose_name_plural = 'Mainpage'
 
 
 class DataListingPage(Page):
@@ -147,7 +159,7 @@ class DataListingPage(Page):
 
 
 
-class DataPage(Page):
+class DataPage(SeoMixin, Page):
     template = 'data_page.html'
     subpage_types = [
         'chart.DataPage',
@@ -159,6 +171,7 @@ class DataPage(Page):
     date = models.DateTimeField(default=timezone.now, verbose_name='Date')
     content = StreamField(
         [
+            ('chart', VisualBlock()),
             ('full_richtext', blocks.RichtextBlock()),
             ('simple_richtext', blocks.SimpleRichtextBlock()),
             ('image', blocks.ImageBlock()),
@@ -167,6 +180,14 @@ class DataPage(Page):
         null=True,
         blank=True,
     )
+    body = StreamField(
+        [
+            ('chart', ChartBlock()),
+        ],
+        null=True,
+        blank=True,
+    )
+    
     subtitle = models.CharField(max_length=100, null=True, blank=True)
     image = models.ForeignKey(
         "wagtailimages.Image",
@@ -179,15 +200,36 @@ class DataPage(Page):
     
     content_panels = Page.content_panels + [
         FieldPanel('date'),
-        FieldPanel('subtitle'),
-        InlinePanel('data_categories', label="category", max_num=1),
         StreamFieldPanel('content'),
+        StreamFieldPanel('body'),
         ImageChooserPanel('image'),
     ]
 
+
+    sidebar_content_panels = [
+        FieldPanel('subtitle'),
+        InlinePanel('data_categories', label="category", max_num=1),
+    ]
+        
+    seo_content_type = SeoType.ARTICLE
+
+    seo_twitter_card = TwitterCard.LARGE
+    
+    promote_panels = SeoMixin.seo_panels
+
+
+    edit_handler = TabbedInterface([
+        
+        ObjectList(content_panels, heading='Content', classname='Content',),
+        ObjectList(sidebar_content_panels, heading='More Content'),
+        #ObjectList(Page.promote_panels, heading='Promote'),
+        ObjectList(Page.settings_panels, heading='Settings', classname='settings'),
+        ObjectList(SeoMixin.seo_panels, heading='SEO', classname='seo'),
+    ])
+    
     class Meta:
-        verbose_name = 'Data'
-        verbose_name_plural = 'Data'
+        verbose_name = 'Data post'
+        verbose_name_plural = 'Data Posts'
 
 
 class DataPageBlogCategory(models.Model):

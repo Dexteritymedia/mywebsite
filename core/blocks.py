@@ -1,6 +1,10 @@
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.core.templatetags.wagtailcore_tags import richtext
+from wagtailcharts.blocks import ChartBlock
+
+class VisualBlock(blocks.StreamBlock):
+    chart_block = ChartBlock()
 
 
 
@@ -188,7 +192,7 @@ class JumbotronBlockWithTextColor(blocks.StructBlock):
             [
                 ('image', ImageChooserBlock(required=False)),
                 ('title', blocks.CharBlock(required=False, max_length=40)),
-                ('description', blocks.RichTextBlock(required=False, features=['h1','h2','h3','h4','h5','h6','hr','bold','italic','link'],)),
+                ('description', blocks.RichTextBlock(required=False, features=['h1','h2','h3','h4','h5','h6','hr','bold','italic','link','code','superscript','subscript','strikethrough','blockquote',],)),
                 ('color', blocks.CharBlock(required=False, max_length=40, help_text="Enter a hexdecimal color for the background e.g #000000")),
                 ('text_color', blocks.CharBlock(required=False, max_length=40, help_text="Enter a hexdecimal color for the text e.g #000000 or red")),
             ]
@@ -222,8 +226,8 @@ class ContactBlock(blocks.StructBlock):
 class HomePageCardBlock(blocks.StructBlock):
     image = ImageChooserBlock(required=False)
     title = blocks.CharBlock(required=True, max_length=60)
-    text = blocks.TextBlock(required=True)
-    button_page = blocks.PageChooserBlock(required=False)
+    text = blocks.TextBlock(required=False)
+    button_page = blocks.PageChooserBlock(required=False, target_model=['chart.DataListingPage'])
     button_text = blocks.CharBlock(required=False, default='Enter', max_length=40)
 
 

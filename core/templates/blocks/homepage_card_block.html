@@ -6,25 +6,25 @@
 
 {% if self.image %}
 {% image self.image original as image %}
-<div class="card bg-dark text-white">
+<div class="card bg-dark text-white mb-5">
 <img src="{{ image.url }}" class="card-img" alt="{{ image.url }}">
 <div class="card-img-overlay">
 <div class="card-body">
 <h1 class="card-title">{{ self.title }}</h1>
 <p class="card-text">{{ self.text }}</p>
 <div class="text-end mt-5">
-<a class="btn btn-outline-secondary mb-3" href="{{ self.button_page.url }}" role="button">{{ self.button_text }}</a>
+<a class="btn btn-primary mb-3" href="{{ self.button_page.url }}" role="button">{{ self.button_text }}</a>
 </div>
 </div>
 </div>
 </div>
 {% else %}
-<div class="card bg-dark text-white">
+<div class="card bg-dark text-white mb-5">
 <div class="card-body">
 <h1 class="card-title">{{ self.title }}</h1>
 <p class="card-text">{{ self.text }}</p>
 <div class="text-end">
-<a class="btn btn-outline-secondary mb-3" href="{{ self.button_page.url }}" role="button">{{ self.button_text }}</a>
+<a class="btn btn-primary mb-3" href="{{ self.button_page.url }}" role="button">{{ self.button_text }}</a>
 </div>
 </div>
 </div>

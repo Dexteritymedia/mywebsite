@@ -20,6 +20,8 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 		
+		{% include "wagtailseo/meta.html" %}
+		
         {# Global stylesheets #}
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
@@ -58,7 +60,7 @@
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
 
-	<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+	<nav class="navbar fixed-top navbar-expand-lg navbar-dark py-0 bg-primary">
 	<!--<nav class="navbar navbar-light" style="background-color: #e3f2fd;"> to change the color
 	<div class="container">
     <a class="navbar-brand" href="#"> to add image
@@ -82,13 +84,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 		{% for item in navigation.menu_items.all %}
-		<li class="nav-item">
+		<li class="nav-item text-uppercase">
           <a class="nav-link active"{% if item.open_in_new_tab %} target="_blank"{% endif %} href="{{ item.link }}">{{ item.title|title }}</a>
         </li>
 		{% endfor %}
       </ul>
 	  {% csrf_token %}
-	  <form class="d-flex" action="{% url 'search' %}" method="get">
+	  <form class="d-flex mb-3" action="{% url 'search' %}" method="get">
         <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
         <input type="submit" value="Search" class="button">
     </form>
@@ -97,9 +99,9 @@
   </div>
 </nav>
 
-<p class="mb-5"></p>
+<p></p>
 <br/>
-<br/>
+
 
   
         {% block content %}{% endblock %}
@@ -199,5 +201,6 @@ function myFunction() {
         {% block extra_js %}
             {# Override this in templates to add extra javascript #}
         {% endblock %}
+	{% include "wagtailseo/struct_data.html" %}
     </body>
 </html>

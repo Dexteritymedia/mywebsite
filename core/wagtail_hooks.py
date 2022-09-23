@@ -4,6 +4,11 @@ from blog.models import BlogPage, KnowledgeBase
 from flex.models import FlexPage
 from contact.models import FormPage
 from chart.models import DataPage, DataListingPage
+from newsletter.models import NewsletterEmail, ExtendedContact
+
+from birdsong.options import CampaignAdmin
+
+from newsletter.filters import ContactFilter
 
 #to change the name "Snippets" to Overview in wagtail admin sidebar
 @hooks.register('construct_main_menu')
@@ -15,10 +20,10 @@ def change_page_name(request, menu_items):
 
 class BlogAdmin(ModelAdmin):
     model = BlogPage
-    menu_label = 'Posts'
+    menu_label = 'Blog Posts'
     menu_icon = 'doc-empty-inverse'
     menu_order = 150
-    add_to_seetings_menu = False
+    add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('title', 'date', 'last_update')
     search_fields = ('title', 'body')
@@ -50,7 +55,7 @@ modeladmin_register(KnowledgeBaseAdmin)
 
 class FormAdmin(ModelAdmin):
     model = FormPage
-    menu_label = 'Contact Form'
+    menu_label = 'Contact Forms'
     menu_icon = 'list-ul'
     menu_order = 600
     add_to_seetings_menu = False
@@ -60,7 +65,7 @@ modeladmin_register(FormAdmin)
 
 class DataAdmin(ModelAdmin):
     model = DataPage
-    menu_label = 'Data'
+    menu_label = 'Data Posts'
     menu_icon = 'list-ul'
     menu_order = 160
     add_to_seetings_menu = False
@@ -73,7 +78,7 @@ modeladmin_register(DataAdmin)
 
 class DataListingAdmin(ModelAdmin):
     model = DataListingPage
-    menu_label = 'Category'
+    menu_label = 'Data Categories'
     #menu_icon = 'list-ul'
     menu_order = 165
     add_to_seetings_menu = False
@@ -82,6 +87,26 @@ class DataListingAdmin(ModelAdmin):
     search_fields = ('title')
 
 modeladmin_register(DataListingAdmin)
+
+
+class NewsletterEmailAdmin(CampaignAdmin):
+    campaign = NewsletterEmail
+    menu_label = 'Newsletter'
+    menu_icon = 'mail'
+    menu_order = 200
+    contact_class = ExtendedContact
+    contact_filter_class = ContactFilter
+    
+modeladmin_register(NewsletterEmailAdmin)
+
+class ContactAdmin(ModelAdmin):
+    model = ExtendedContact
+    menu_label = 'Contacts'
+    menu_icon = 'user'
+    menu_order = 210
+    list_diplay = ('email', 'first_name', 'last_name', 'location')
+
+modeladmin_register(ContactAdmin)
 
 #to change the name "Pages" to Overview in wagtail admin sidebar
 @hooks.register('construct_main_menu')

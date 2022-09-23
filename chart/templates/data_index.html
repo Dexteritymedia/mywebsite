@@ -44,17 +44,17 @@
 	{% endif %}
 	
 	<div class="container">
-		<div class="row row-cols-1 row-cols-md-3 g-4 mt-3 mb-3">
+		<div class="row row-cols-1 row-cols-md-3 g-4 mt-3 mb-5">
 		
 		{% for post in posts %}
-				<div class="col">
-					<div class="card box-shadow-hover pointer">
+				<div class="col mt-4">
+					<div class="card mt-5 box-shadow-hover pointer">
 					<a href="{{ post.url }}">
 					{% image post.image original as blog_img %}
-						<img src="{{ blog_img.url }}" class="img-top2" alt="{{ blog_img.alt }}">
+						<img src="{{ blog_img.url }}" class="blackwhite card-img-top" style="height: 50vw; object-fit: cover;" alt="{{ blog_img.alt }}">
 						<div class="card-img-overlay">
 						
-						{% if post.get_parent.title != 'blog' %}
+						{% if post.get_parent.title != 'data' %}
 						<button class="btn btn-primary btn-sm" role="button">Uncategorized</button>
 						{% else %}
 						<button class="btn btn-primary btn-sm" role="button">{{ post.get_parent.title|title }}</button>
@@ -79,7 +79,10 @@
 								</p>
 								<a href="{{ post.url }}">
 								<p class="card-text">
-								{{ post.body|richtext|safe|truncatewords:50 }}
+								game
+								{% for block in post.content %}
+								{{ block.value.full_richtext|richtext|safe }}
+								{% endfor %}
 								</p>
 							</div>
 							</a>

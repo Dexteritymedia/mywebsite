@@ -41,6 +41,14 @@ INSTALLED_APPS = [
     'flex',
     'contact',
     'chart',
+    'newsletter',
+
+    #'mjml',
+    'birdsong',
+    'wagtailseo',
+    'wagtailcharts',
+    'wagtailfontawesome',
+    'wagtail_blocks',
     
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -114,8 +122,17 @@ WSGI_APPLICATION = 'mywebsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-#postgresql database setup
+#sqlite database
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    }
+}
+
+#postgresql database setup
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -126,7 +143,7 @@ DATABASES = {
         'PORT':'',
     }
 }
-
+"""
 #mysql database setup
 """
 DATABASES = {
@@ -223,4 +240,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 #to disable notification for wagtail updates
-#WAGTAIL_ENABLE_UPDATE_CHECK = False
+WAGTAIL_ENABLE_UPDATE_CHECK = False
